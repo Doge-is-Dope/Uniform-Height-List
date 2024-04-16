@@ -31,13 +31,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpBookList() {
-        val dividerItemDecoration = DividerItemDecoration(this, RecyclerView.HORIZONTAL)
-        binding.bookList.addItemDecoration(dividerItemDecoration)
-
         val adapter = BookAdapter {
             Timber.tag("test").d("Book clicked: $it")
         }
-        binding.bookList.setHasFixedSize(true)
         binding.bookList.adapter = adapter
 
         viewModel.getBooks(layoutInflater, binding.bookList)
