@@ -6,8 +6,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
 import com.dogeisdope.uniformheightlist.databinding.ActivityMainBinding
 import timber.log.Timber
 
@@ -31,14 +29,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpBookList() {
-        val adapter = BookAdapter {
-            Timber.tag("test").d("Book clicked: $it")
-        }
-        binding.bookList.adapter = adapter
-
         viewModel.getBooks(layoutInflater, binding.bookList)
-        viewModel.books.observe(this) {
-            adapter.submitList(it)
+        viewModel.books.observe(this) { (maxHeight, books) ->
+            val adapter = BookAdapter(maxHeight) { book ->
+                Timber.tag("test").d("Clicked on book: ${book.title}")
+            }
+            binding.bookList.adapter = adapter
+            adapter.submitList(books)
         }
     }
 

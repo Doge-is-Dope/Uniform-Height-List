@@ -6,28 +6,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dogeisdope.uniformheightlist.databinding.ListItemBookBinding
 
 class BookViewHolder(
+    maxHeight: Int,
     private val binding: ListItemBookBinding,
     private val onBookClick: (Book) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(book: Book) {
-        binding.root.setOnClickListener { onBookClick(book) }
-        updateBook(book)
+    init {
+        itemView.layoutParams.height = maxHeight
     }
 
-    fun updateBook(book: Book) {
+    fun bind(book: Book) {
         with(binding) {
             titleLength.text = book.title.length.toString()
             title.text = book.title
-            root.layoutParams.height = book.maxHeight
+            root.setOnClickListener { onBookClick(book) }
         }
     }
 
     companion object {
-        fun from(parent: ViewGroup, onBookClick: (Book) -> Unit): BookViewHolder {
+        fun from(parent: ViewGroup, onBookClick: (Book) -> Unit, maxHeight: Int): BookViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ListItemBookBinding.inflate(layoutInflater, parent, false)
-            return BookViewHolder(binding, onBookClick)
+            return BookViewHolder(maxHeight, binding, onBookClick)
         }
     }
 }

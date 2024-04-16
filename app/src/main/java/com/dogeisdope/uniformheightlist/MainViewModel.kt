@@ -16,8 +16,8 @@ import timber.log.Timber
 import kotlin.random.Random
 
 class MainViewModel : ViewModel() {
-    private val _books = MutableLiveData<List<Book>>()
-    val books: LiveData<List<Book>> = _books
+    private val _books = MutableLiveData<Pair<Int, List<Book>>>()
+    val books: LiveData<Pair<Int, List<Book>>> = _books
 
     fun getBooks(layoutInflater: LayoutInflater, viewGroup: ViewGroup) {
         viewModelScope.launch {
@@ -28,11 +28,7 @@ class MainViewModel : ViewModel() {
                     Book(id = index.toLong(), title = getDummyRandomText(randomLength))
                 }
             }
-
-
-            val maxHeight = getMaxHeight(layoutInflater, viewGroup, books)
-            Timber.tag("test").d("Max height: $maxHeight")
-            _books.value = books.map { it.copy(maxHeight = maxHeight) }
+            _books.value = getMaxHeight(layoutInflater, viewGroup, books) to books
         }
     }
 
